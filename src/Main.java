@@ -1,3 +1,9 @@
+import manager.TaskManager;
+import model.Epic;
+import model.Status;
+import model.Subtask;
+import model.Task;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -19,8 +25,13 @@ public class Main {
         taskManager.addEpic(epicB);
         taskManager.addSubtask(subtaskB1);
 
-        System.out.println('\n' + "Проверка printAll() и что все создалось правильно");
-        taskManager.printAll();
+        System.out.println('\n' + "Проверка printTasks(), printEpics(), printSubtasks() и что все создалось правильно");
+        System.out.println("Список задач:");
+        System.out.println(taskManager.getTasks());
+        System.out.println("Список эпиков:");
+        System.out.println(taskManager.getEpics());
+        System.out.println("Список подзадач:");
+        System.out.println(taskManager.getSubtasks());
         System.out.println();
 
         System.out.println("Проверка getById() и что всё печатается корректно");
@@ -31,21 +42,31 @@ public class Main {
 
         System.out.println("Проверка updateTask(), updateEpic(), updateSubtask(), " +
                 "и как обновляются статусы в эпике от обновления подзадач");
-        task1 = new Task("Задача 1", "Детали задачи 1", Status.IN_PROGRESS);
-        epicB = new Epic("Эпик B", "Новые детали эпика B");
-        subtaskA1 = new Subtask("Подзадача A1", "Детали подзадачи A1", Status.IN_PROGRESS, 3);
-        subtaskB1 = new Subtask("Подзадача B1", "Детали подзадачи B1", Status.DONE, 6);
+        task1 = new Task("Задача 1", "Детали задачи 1", 1, Status.IN_PROGRESS);
+        epicB = new Epic("Эпик B", "Новые детали эпика B", 6);
+        subtaskA1 = new Subtask("Подзадача A1", "Детали подзадачи A1", 4, Status.IN_PROGRESS, 3);
+        subtaskB1 = new Subtask("Подзадача B1", "Детали подзадачи B1", 7, Status.DONE, 6);
 
-        taskManager.updateTask(1, task1);
-        taskManager.updateEpic(6, epicB);
-        taskManager.updateSubtask(4, subtaskA1);
-        taskManager.updateSubtask(7, subtaskB1);
-        taskManager.printAll();
+        taskManager.updateTask(task1);
+        taskManager.updateEpic(epicB);
+        taskManager.updateSubtask(subtaskA1);
+        taskManager.updateSubtask(subtaskB1);
+        System.out.println("Список задач:");
+        System.out.println(taskManager.getTasks());
+        System.out.println("Список эпиков:");
+        System.out.println(taskManager.getEpics());
+        System.out.println("Список подзадач:");
+        System.out.println(taskManager.getSubtasks());
         System.out.println();
 
         System.out.println("Проверка removeById(), и что от удаления эпика удаляются также и подзадачи");
         taskManager.removeById(1);
         taskManager.removeById(3);
-        taskManager.printAll();
+        System.out.println("Список задач:");
+        System.out.println(taskManager.getTasks());
+        System.out.println("Список эпиков:");
+        System.out.println(taskManager.getEpics());
+        System.out.println("Список подзадач:");
+        System.out.println(taskManager.getSubtasks());
     }
 }
