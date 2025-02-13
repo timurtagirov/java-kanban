@@ -34,9 +34,7 @@ public class TaskManager {
         }
         subtask.setId(++id);
         subtasks.put(id, subtask);
-        ArrayList<Integer> newSubtasksList = epics.get(subtask.getEpicId()).getSubtasksList();
-        newSubtasksList.add(id);
-        epics.get(subtask.getEpicId()).setSubtasksList(newSubtasksList);
+        epics.get(subtask.getEpicId()).getSubtasksList().add(id);
         checkEpicStatus(subtask.getEpicId());
     }
 
@@ -52,11 +50,21 @@ public class TaskManager {
         return new ArrayList<Subtask>(subtasks.values());
     }
 
-    public void removeAll() {
-        id = 0;
+    public void removeTasks() {
         tasks.clear();
+    }
+
+    public void removeEpics() {
         epics.clear();
         subtasks.clear();
+    }
+
+    public void removeSubtasks() {
+        subtasks.clear();
+        for (Epic epic : epics.values()) {
+            epic.getSubtasksList().clear();
+            epic.setStatus(Status.NEW);
+        }
     }
 
     public Task getById(int id) {
@@ -79,10 +87,11 @@ public class TaskManager {
             return;
         }
         if (subtasks.containsKey(id)) {
-            ArrayList<Integer> newSubtasksList = epics.get(subtasks.get(id).getEpicId()).getSubtasksList();
-            newSubtasksList.remove(id);
-            epics.get(subtasks.get(id).getEpicId()).setSubtasksList(newSubtasksList);
-            subtasks.remove(id);
+            /*ArrayList<Integer> newSubtasksList = epics.get(subtasks.get(id).getEpicId()).getSubtasksList();
+            newSubtasksList.remove(id);*/
+            epics.get(subtasks.get(id).getEpicId()).getSubtasksList().remove(id);
+            int epicId = subtasks.get(id).getEpicId();
+            checkEpicStatus(epicId);
         }
     }
 
@@ -108,16 +117,12 @@ public class TaskManager {
             System.out.println("Подзадачи с таким идентификатором не существует.");
             return;
         }
-        int epicId = subtasks.get(subtask.getId()).getEpicId(); // следующие 5 строк кода убираем подзадачу из старого эпика
-        ArrayList<Integer> newSubtasksList = epics.get(epicId).getSubtasksList();
-        newSubtasksList.remove(Integer.valueOf(subtask.getId()));
-        epics.get(epicId).setSubtasksList(newSubtasksList);
+        int epicId = subtasks.get(subtask.getId()).getEpicId(); // следующие 3 строки кода убираем подзадачу из старого эпика
+        epics.get(epicId).getSubtasksList().remove(Integer.valueOf(subtask.getId()));
         checkEpicStatus(epicId);
         subtasks.put(subtask.getId(), subtask); // добавляем подзадачу в список подзадач
-        epicId = subtasks.get(subtask.getId()).getEpicId(); // следующие 5 строки кода добавляем подзадачу в новый эпик
-        newSubtasksList = epics.get(epicId).getSubtasksList();
-        newSubtasksList.add(subtask.getId());
-        epics.get(epicId).setSubtasksList(newSubtasksList);
+        epicId = subtasks.get(subtask.getId()).getEpicId(); // следующие 3 строки кода добавляем подзадачу в новый эпик
+        epics.get(epicId).getSubtasksList().add(subtask.getId());
         checkEpicStatus(epicId);
     }
 

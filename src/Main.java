@@ -68,5 +68,15 @@ public class Main {
         System.out.println(taskManager.getEpics());
         System.out.println("Список подзадач:");
         System.out.println(taskManager.getSubtasks());
+        System.out.println();
+
+        System.out.println("Проверка removeSubtasks()");
+        taskManager.removeSubtasks();
+        System.out.println("Список задач:");
+        System.out.println(taskManager.getTasks());
+        System.out.println("Список эпиков:");
+        System.out.println(taskManager.getEpics());
+        System.out.println("Список подзадач:");
+        System.out.println(taskManager.getSubtasks());
     }
 }
