@@ -60,8 +60,8 @@ public class Main {
         System.out.println();
 
         System.out.println("Проверка removeById(), и что от удаления эпика удаляются также и подзадачи");
-        taskManager.removeById(1);
-        taskManager.removeById(3);
+        taskManager.removeById(4);
+        taskManager.removeById(6);
         System.out.println("Список задач:");
         System.out.println(taskManager.getTasks());
         System.out.println("Список эпиков:");

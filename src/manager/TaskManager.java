@@ -87,11 +87,10 @@ public class TaskManager {
             return;
         }
         if (subtasks.containsKey(id)) {
-            /*ArrayList<Integer> newSubtasksList = epics.get(subtasks.get(id).getEpicId()).getSubtasksList();
-            newSubtasksList.remove(id);*/
-            epics.get(subtasks.get(id).getEpicId()).getSubtasksList().remove(id);
             int epicId = subtasks.get(id).getEpicId();
+            epics.get(epicId).getSubtasksList().remove(Integer.valueOf(id));
             checkEpicStatus(epicId);
+            subtasks.remove(id);
         }
     }
 
