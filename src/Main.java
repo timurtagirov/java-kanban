@@ -1,20 +1,22 @@
-import manager.TaskManager;
+import manager.InMemoryTaskManager;
 import model.Epic;
 import model.Status;
 import model.Subtask;
 import model.Task;
 
+import java.util.ArrayList;
+
 public class Main {
 
     public static void main(String[] args) {
 
-        TaskManager taskManager = new TaskManager();
+        InMemoryTaskManager taskManager = new InMemoryTaskManager();
         Task task1 = new Task("Задача 1", "Детали задачи 1", Status.NEW);
         Task task2 = new Task("Задача 2", "Детали задачи 2", Status.IN_PROGRESS);
         Epic epicA = new Epic("Эпик A", "Детали эпика A");
         Subtask subtaskA1 = new Subtask("Подзадача A1", "Детали подзадачи A1", Status.NEW, 3);
         Subtask subtaskA2 = new Subtask("Подзадача A2", "Детали подзадачи A2", Status.NEW, 3);
-        Epic epicB = new Epic("Эпик B", "Детали эпика B");
+        Epic epicB = new Epic("Эпик B", "Детали эпика B", 6);
         Subtask subtaskB1 = new Subtask("Подзадача B1", "Детали подзадачи B1", Status.IN_PROGRESS, 6);
 
         taskManager.addTask(task1);
@@ -78,5 +80,7 @@ public class Main {
         System.out.println(taskManager.getEpics());
         System.out.println("Список подзадач:");
         System.out.println(taskManager.getSubtasks());
+
+        System.out.println(taskManager.getHistory());
     }
 }

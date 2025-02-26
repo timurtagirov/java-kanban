@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Epic extends Task {
     private ArrayList<Integer> subtasksList = new ArrayList<>(); // Для хранения ID подзадач и их статусов
@@ -11,6 +12,7 @@ public class Epic extends Task {
 
     public Epic(String name, String description, int id) {
         super(name, description);
+        this.id = id;
     }
 
     public ArrayList<Integer> getSubtasksList() {
@@ -18,6 +20,8 @@ public class Epic extends Task {
     }
 
     public void setSubtasksList(ArrayList<Integer> newSubtasksList) {
+        newSubtasksList.removeAll(Arrays.asList((Integer) this.getId())); // Эпик не может быть своей собственной подзадачей
         this.subtasksList = newSubtasksList;
     }
+
 }

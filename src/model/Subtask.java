@@ -5,12 +5,16 @@ public class Subtask extends Task {
 
     public Subtask(String name, String description, Status status, int epicId) {
         super(name, description, status);
-        this.epicId = epicId;
+        if (epicId != id) {
+            this.epicId = epicId;
+        } else {
+            System.out.println("Подзадачу нельзя добавлять саму в себя");
+        }
     }
 
     public Subtask(String name, String description, int id, Status status, int epicId) {
         super(name, description, id, status);
-        this.epicId = epicId;
+        if (epicId != id) this.epicId = epicId;
     }
 
     @Override
@@ -22,5 +26,9 @@ public class Subtask extends Task {
 
     public int getEpicId() {
         return this.epicId;
+    }
+
+    public void setEpicId(int epicId) {
+        if (id != epicId) this.epicId = epicId;
     }
 }
