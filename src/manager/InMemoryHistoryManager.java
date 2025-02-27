@@ -8,30 +8,30 @@ import java.util.ArrayList;
 
 public class InMemoryHistoryManager implements HistoryManager {
     ArrayList<Task> taskHistory = new ArrayList<>();
+    public static final int MAX_HISTORY_SIZE = 10;
 
     @Override
     public void add(Task task) {
+        if (task == null) return;
         if (task instanceof Epic epic) {
-            Epic newEpic = new Epic(epic.getName(), epic.getDescription(), epic.getId());
-            newEpic.setStatus(epic.getStatus());
-            newEpic.setSubtasksList(new ArrayList<>(epic.getSubtasksList()));
+            Epic newEpic = epic.copy();
             taskHistory.add(newEpic);
-            if (taskHistory.size() == 11) taskHistory.removeFirst();
+            if (taskHistory.size() > MAX_HISTORY_SIZE) taskHistory.removeFirst();
             return;
         } else if (task instanceof Subtask subtask) {
-            Subtask newSubtask = new Subtask(subtask.getName(), subtask.getDescription(), subtask.getId(),
-                    subtask.getStatus(), subtask.getEpicId());
+            Subtask newSubtask = subtask.copy();
             taskHistory.add(newSubtask);
-            if (taskHistory.size() == 11) taskHistory.removeFirst();
+            if (taskHistory.size() > MAX_HISTORY_SIZE) taskHistory.removeFirst();
             return;
         } else {
-            taskHistory.add(task);
-            if (taskHistory.size() == 11) taskHistory.removeFirst();
+            Task newTask = task.copy();
+            taskHistory.add(newTask);
+            if (taskHistory.size() > MAX_HISTORY_SIZE) taskHistory.removeFirst();
         }
     }
 
     @Override
     public ArrayList<Task> getHistory() {
-        return taskHistory;
+        return new ArrayList<>(taskHistory);
     }
 }

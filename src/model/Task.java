@@ -94,4 +94,8 @@ public class Task {
                 ", status=" + status +
                 '}';
     }
+
+    public Task copy() {
+        return new Task(name, description, id, status);
+    }
 }

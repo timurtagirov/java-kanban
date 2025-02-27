@@ -35,5 +35,5 @@ public interface TaskManager {
 
     void updateSubtask(Subtask subtask);
 
-    InMemoryHistoryManager getHistoryManager();
+    ArrayList<Task> getHistory();
 }

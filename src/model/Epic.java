@@ -24,4 +24,11 @@ public class Epic extends Task {
         this.subtasksList = newSubtasksList;
     }
 
+    @Override
+    public Epic copy() {
+        Epic newEpic = new Epic(this.getName(), this.getDescription(), this.getId());
+        newEpic.setStatus(this.getStatus());
+        newEpic.setSubtasksList(new ArrayList<>(this.getSubtasksList()));
+        return newEpic;
+    }
 }

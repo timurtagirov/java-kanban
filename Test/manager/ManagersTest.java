@@ -1,6 +1,7 @@
+package manager;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-import manager.TaskManager;
 import org.junit.jupiter.api.Test;
 
 class ManagersTest {
