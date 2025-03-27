@@ -4,8 +4,6 @@ import model.Status;
 import model.Subtask;
 import model.Task;
 
-import java.util.ArrayList;
-
 public class Main {
 
     public static void main(String[] args) {
@@ -40,6 +38,10 @@ public class Main {
         for (int i = 1; i <= 7; i++) {
             System.out.println(taskManager.getById(i));
         }
+        System.out.println("Вызовем ещё раз некоторые таски, чтобы проверить в конце InMemoryHistoryManager");
+        System.out.println(taskManager.getById(5));
+        System.out.println(taskManager.getById(3));
+        System.out.println(taskManager.getById(1));
         System.out.println();
 
         System.out.println("Проверка updateTask(), updateEpic(), updateSubtask(), " +

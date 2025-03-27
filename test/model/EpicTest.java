@@ -25,4 +25,16 @@ class EpicTest {
         taskManager.getEpics().getFirst().setSubtasksList(newSubtasks);
         assertEquals(0, taskManager.getEpics().getFirst().getSubtasksList().size());
     }
+
+    @Test   // Проверка, что внутри эпиков не должно оставаться неактуальных id подзадач
+    public void shouldNotHaveRemovedSubtask() {
+        InMemoryTaskManager taskManager = new InMemoryTaskManager();
+        taskManager.addEpic(epic);
+        Subtask subtaskA1 = new Subtask("Подзадача A1", "Детали подзадачи A1", 2, Status.IN_PROGRESS, 1);
+        Subtask subtaskB1 = new Subtask("Подзадача B1", "Детали подзадачи B1", 3, Status.DONE, 1);
+        taskManager.addSubtask(subtaskA1);
+        taskManager.addSubtask(subtaskB1);
+        taskManager.removeById(2);
+        assertEquals(1, taskManager.getEpics().getFirst().getSubtasksList().size());
+    }
 }
