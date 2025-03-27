@@ -57,10 +57,10 @@ class InMemoryHistoryManagerTest {
         historyManager.add(new Task("Задача 2", "Детали задачи 2", 2, Status.NEW));
         historyManager.add(new Task("Задача 3", "Детали задачи 3", 3, Status.NEW));
         historyManager.add(new Task("Задача 2", "Детали задачи 2", 2, Status.NEW));
-        assertTrue(historyManager.getTasks().get(0).getId()==1 &&
-                historyManager.getTasks().get(1).getId()==3 &&
-                historyManager.getTasks().get(2).getId()==2 &&
-                historyManager.getTasks().size()==3);
+        assertTrue(historyManager.getTasks().get(0).getId() == 1 &&
+                historyManager.getTasks().get(1).getId() == 3 &&
+                historyManager.getTasks().get(2).getId() == 2 &&
+                historyManager.getTasks().size() == 3);
     }
 
     @Test  // Проверка, метода remove(int id) у InMemoryHistoryManager
@@ -70,8 +70,8 @@ class InMemoryHistoryManagerTest {
         historyManager.add(new Task("Задача 3", "Детали задачи 3", 3, Status.NEW));
         historyManager.add(new Task("Задача 2", "Детали задачи 2", 2, Status.NEW));
         historyManager.remove(3);
-        assertTrue(historyManager.getTasks().get(0).getId()==1 &&
-                historyManager.getTasks().get(1).getId()==2 &&
-                historyManager.getTasks().size()==2);
+        assertTrue(historyManager.getTasks().get(0).getId() == 1 &&
+                historyManager.getTasks().get(1).getId() == 2 &&
+                historyManager.getTasks().size() == 2);
     }
 }

@@ -55,7 +55,7 @@ public class InMemoryHistoryManager implements HistoryManager {
             taskHistory.get(node.data.getId()).prev.next = null;
             lastNode = taskHistory.get(node.data.getId()).prev.data.getId();
             taskHistory.remove(node.data.getId());
-        }  else {
+        } else {
             taskHistory.get(node.data.getId()).prev.next = taskHistory.get(node.data.getId()).next;
             taskHistory.get(node.data.getId()).next.prev = taskHistory.get(node.data.getId()).prev;
             taskHistory.remove(node.data.getId());
