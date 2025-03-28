@@ -2,7 +2,6 @@ package manager;
 
 import model.Status;
 import model.Task;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -73,5 +72,19 @@ class InMemoryHistoryManagerTest {
         assertTrue(historyManager.getTasks().get(0).getId() == 1 &&
                 historyManager.getTasks().get(1).getId() == 2 &&
                 historyManager.getTasks().size() == 2);
+    }
+
+    @Test
+    public void shouldRemoveTasksFromHistoryManagerAfterRemovalFromTaskManager() {
+        taskManager.addTask(new Task("Задача 1", "Детали задачи 1", 1, Status.NEW));
+        taskManager.addTask(new Task("Задача 2", "Детали задачи 2", 2, Status.NEW));
+        taskManager.addTask(new Task("Задача 3", "Детали задачи 3", 3, Status.NEW));
+        taskManager.getById(1);
+        taskManager.getById(2);
+        taskManager.getById(3);
+        taskManager.removeById(1);
+        assertTrue(taskManager.getHistory().get(0).getId() == 2 &&
+                taskManager.getHistory().get(1).getId() == 3 &&
+                taskManager.getHistory().size() == 2);
     }
 }

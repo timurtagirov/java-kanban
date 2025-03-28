@@ -8,28 +8,26 @@ import java.util.HashMap;
 
 public class InMemoryHistoryManager implements HistoryManager {
     HashMap<Integer, Node<Task>> taskHistory = new HashMap<>();
-    int firstNode = -1;
-    int lastNode = -1;
-    public static final int MAX_HISTORY_SIZE = 10;
+    Node<Task> firstNode;
+    Node<Task> lastNode;
 
     public void linkLast(Task task) {
-        taskHistory.put(task.getId(), new Node(task));
+        Node<Task> newNode = new Node(task);
+        taskHistory.put(task.getId(), newNode);
         if (taskHistory.size() > 1) {
-            taskHistory.get(lastNode).next = taskHistory.get(task.getId());
-            taskHistory.get(task.getId()).prev = taskHistory.get(lastNode);
+            lastNode.next = newNode;
+            newNode.prev = lastNode;
         } else {
-            firstNode = task.getId();
+            firstNode = newNode;
         }
-        lastNode = task.getId();
+        lastNode = newNode;
     }
 
     public ArrayList<Task> getTasks() {
         ArrayList<Task> tasks = new ArrayList<>();
         if (taskHistory.isEmpty()) return tasks;
-        Node<Task> node = taskHistory.get(firstNode);
+        Node<Task> node = firstNode;
         tasks.add(node.data);
-        boolean check1 = node.next != null;
-        boolean check2 = taskHistory.get(firstNode).next != null;
         while (node.next != null) {
             node = node.next;
             tasks.add(node.data);
@@ -41,30 +39,30 @@ public class InMemoryHistoryManager implements HistoryManager {
         if (!taskHistory.containsKey(node.data.getId())) return;  // Проверяем наличие такого узла по id задачи
         if (taskHistory.size() == 1) {
             taskHistory.remove(node.data.getId());
-            firstNode = -1;
-            lastNode = -1;
+            firstNode = null;
+            lastNode = null;
             return;
         }
-        if (taskHistory.get(node.data.getId()).prev == null) {
-            taskHistory.get(node.data.getId()).next.prev = null;
-            firstNode = taskHistory.get(node.data.getId()).next.data.getId();
-            taskHistory.remove(node.data.getId());
-        } else if (taskHistory.get(node.data.getId()).next == null) {
-            taskHistory.get(node.data.getId()).prev.next = null;
-            lastNode = taskHistory.get(node.data.getId()).prev.data.getId();
-            taskHistory.remove(node.data.getId());
+        if (node.data.getId() == firstNode.data.getId()) {  // Если удаляем первый узел
+            firstNode.next.prev = null;
+            firstNode = firstNode.next;
+        } else if (node.data.getId() == lastNode.data.getId()) {  // Если удаляем последний узел
+            lastNode.prev.next = null;
+            lastNode = lastNode.prev;
         } else {
-            taskHistory.get(node.data.getId()).prev.next = taskHistory.get(node.data.getId()).next;
-            taskHistory.get(node.data.getId()).next.prev = taskHistory.get(node.data.getId()).prev;
-            taskHistory.remove(node.data.getId());
+            node.prev.next = node.next;
+            node.next.prev = node.prev;
         }
+        taskHistory.remove(node.data.getId());
     }
 
     @Override
     public void add(Task task) {
         if (task == null) return;
         Task newTask = task.copy();
-        removeNode(new Node<Task>(newTask));
+        if (taskHistory.containsKey(task.getId())) {
+            removeNode(taskHistory.get(task.getId()));
+        }
         linkLast(newTask);
     }
 
