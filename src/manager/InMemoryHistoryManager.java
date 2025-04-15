@@ -1,37 +1,80 @@
 package manager;
 
-import model.Epic;
-import model.Subtask;
 import model.Task;
+import model.Node;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    ArrayList<Task> taskHistory = new ArrayList<>();
-    public static final int MAX_HISTORY_SIZE = 10;
+    HashMap<Integer, Node<Task>> taskHistory = new HashMap<>();
+    Node<Task> firstNode;
+    Node<Task> lastNode;
+
+    public void linkLast(Task task) {
+        Node<Task> newNode = new Node(task);
+        taskHistory.put(task.getId(), newNode);
+        if (taskHistory.size() > 1) {
+            lastNode.next = newNode;
+            newNode.prev = lastNode;
+        } else {
+            firstNode = newNode;
+        }
+        lastNode = newNode;
+    }
+
+    public ArrayList<Task> getTasks() {
+        ArrayList<Task> tasks = new ArrayList<>();
+        if (taskHistory.isEmpty()) return tasks;
+        Node<Task> node = firstNode;
+        tasks.add(node.data);
+        while (node.next != null) {
+            node = node.next;
+            tasks.add(node.data);
+        }
+        return tasks;
+    }
+
+    public void removeNode(Node<Task> node) {
+        if (!taskHistory.containsKey(node.data.getId())) return;  // Проверяем наличие такого узла по id задачи
+        if (taskHistory.size() == 1) {
+            taskHistory.remove(node.data.getId());
+            firstNode = null;
+            lastNode = null;
+            return;
+        }
+        if (node.data.getId() == firstNode.data.getId()) {  // Если удаляем первый узел
+            firstNode.next.prev = null;
+            firstNode = firstNode.next;
+        } else if (node.data.getId() == lastNode.data.getId()) {  // Если удаляем последний узел
+            lastNode.prev.next = null;
+            lastNode = lastNode.prev;
+        } else {
+            node.prev.next = node.next;
+            node.next.prev = node.prev;
+        }
+        taskHistory.remove(node.data.getId());
+    }
 
     @Override
     public void add(Task task) {
         if (task == null) return;
-        if (task instanceof Epic epic) {
-            Epic newEpic = epic.copy();
-            taskHistory.add(newEpic);
-            if (taskHistory.size() > MAX_HISTORY_SIZE) taskHistory.removeFirst();
-            return;
-        } else if (task instanceof Subtask subtask) {
-            Subtask newSubtask = subtask.copy();
-            taskHistory.add(newSubtask);
-            if (taskHistory.size() > MAX_HISTORY_SIZE) taskHistory.removeFirst();
-            return;
-        } else {
-            Task newTask = task.copy();
-            taskHistory.add(newTask);
-            if (taskHistory.size() > MAX_HISTORY_SIZE) taskHistory.removeFirst();
+        Task newTask = task.copy();
+        if (taskHistory.containsKey(task.getId())) {
+            removeNode(taskHistory.get(task.getId()));
         }
+        linkLast(newTask);
     }
 
     @Override
     public ArrayList<Task> getHistory() {
-        return new ArrayList<>(taskHistory);
+        return getTasks();
+    }
+
+    @Override
+    public void remove(int id) {
+        if (!taskHistory.containsKey(id)) return;
+        Node<Task> deletedNode = taskHistory.get(id);
+        removeNode(deletedNode);
     }
 }

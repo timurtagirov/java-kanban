@@ -1,8 +1,10 @@
 package manager;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 
 import model.Epic;
@@ -16,7 +18,8 @@ class InMemoryTaskManagerTest {
 
     @BeforeEach  // очищаем список задач перед новым тестом
     public void clearAll() {
-        taskManager.removeTasks();;
+        taskManager.removeTasks();
+        ;
         taskManager.removeEpics();
         taskManager.removeSubtasks();
     }
@@ -47,7 +50,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test   // Проверка, что после добавления задачи в менеджер, ее поля не меняются
-            // (кроме списка подзадач для эпика, он должен меняться при добавлении сабтаска, поэтому это поле не проверяем)
+    // (кроме списка подзадач для эпика, он должен меняться при добавлении сабтаска, поэтому это поле не проверяем)
     public void shouldNotChangeTasksAfterAddingToTaskManager() {
         Task task1 = new Task("Задача 1", "Детали задачи 1", 1, Status.NEW);
         Epic epicA = new Epic("Эпик A", "Детали эпика A", 2);
