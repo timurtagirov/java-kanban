@@ -3,7 +3,6 @@ package manager;
 import model.*;
 
 import java.io.*;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.nio.file.Files;
@@ -12,7 +11,6 @@ import java.nio.charset.StandardCharsets;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     String fileName;
