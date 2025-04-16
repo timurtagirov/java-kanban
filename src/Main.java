@@ -4,6 +4,7 @@ import model.Epic;
 import model.Status;
 import model.Subtask;
 import model.Task;
+import  model.TaskTypes;
 
 import java.io.File;
 
@@ -97,17 +98,17 @@ public class Main {
         taskManager1.addEpic(epicB);
         taskManager1.addSubtask(subtaskB1);
 
-        System.out.println(taskManager1.toString(task1));
-        System.out.println(taskManager1.toString(epicA));
-        System.out.println(taskManager1.toString(subtaskA1));
-        System.out.println(taskManager1.toString(taskManager1.fromString("1,TASK,Задача 1,IN_PROGRESS,Детали задачи 1")));
-        System.out.println(taskManager1.toString(taskManager1.fromString("3,EPIC,Эпик A,IN_PROGRESS,Детали эпика A")));
-        System.out.println(taskManager1.toString(taskManager1.fromString("4,SUBTASK,Подзадача A1,IN_PROGRESS,Детали подзадачи A1,3")));
+        System.out.println(taskManager1.taskToString(task1));
+        System.out.println(taskManager1.taskToString(epicA));
+        System.out.println(taskManager1.taskToString(subtaskA1));
+        System.out.println(taskManager1.taskToString(taskManager1.fromString("1,TASK,Задача 1,IN_PROGRESS,Детали задачи 1")));
+        System.out.println(taskManager1.taskToString(taskManager1.fromString("3,EPIC,Эпик A,IN_PROGRESS,Детали эпика A")));
+        System.out.println(taskManager1.taskToString(taskManager1.fromString("4,SUBTASK,Подзадача A1,IN_PROGRESS,Детали подзадачи A1,3")));
         System.out.println(System.getProperty("user.dir"));
 
         FileBackedTaskManager taskManager2 = FileBackedTaskManager.loadFromFile(new File("C:\\Users\\Lenovo\\IdeaProjects\\Sprint4\\java-kanban\\tasks.csv"));
-        System.out.println(taskManager2.toString(task1));
-        System.out.println(taskManager2.toString(epicA));
-        System.out.println(taskManager2.toString(subtaskA1));
+        System.out.println(taskManager2.taskToString(task1));
+        System.out.println(taskManager2.taskToString(epicA));
+        System.out.println(taskManager2.taskToString(subtaskA1));
     }
 }

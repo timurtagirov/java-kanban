@@ -98,4 +98,8 @@ public class Task {
     public Task copy() {
         return new Task(name, description, id, status);
     }
+
+    public TaskTypes getType() {
+        return TaskTypes.TASK;
+    }
 }

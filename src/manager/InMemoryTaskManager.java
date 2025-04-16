@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class InMemoryTaskManager implements TaskManager {
-    private int id = 0;
-    HashMap<Integer, Task> tasks = new HashMap<>();
-    HashMap<Integer, Epic> epics = new HashMap<>();
-    HashMap<Integer, Subtask> subtasks = new HashMap<>();
-    HistoryManager historyManager = Managers.getDefaultHistory();
+    protected int id = 0;
+    protected HashMap<Integer, Task> tasks = new HashMap<>();
+    protected HashMap<Integer, Epic> epics = new HashMap<>();
+    protected HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    protected HistoryManager historyManager = Managers.getDefaultHistory();
 
     public InMemoryTaskManager() {
     }
@@ -24,17 +24,9 @@ public class InMemoryTaskManager implements TaskManager {
         tasks.put(id, task);
     }
 
-    public void addTask(Task task, int id) {
-        tasks.put(id, task);
-    }
-
     @Override
     public void addEpic(Epic epic) {
         epic.setId(++id);
-        epics.put(id, epic);
-    }
-
-    public void addEpic(Epic epic, int id) {
         epics.put(id, epic);
     }
 
@@ -45,17 +37,6 @@ public class InMemoryTaskManager implements TaskManager {
             return;
         }
         subtask.setId(++id);
-        if (subtask.getId() == subtask.getEpicId()) return;
-        subtasks.put(id, subtask);
-        epics.get(subtask.getEpicId()).getSubtasksList().add(id);
-        checkEpicStatus(subtask.getEpicId());
-    }
-
-    public void addSubtask(Subtask subtask, int id) {
-        if (!epics.containsKey(subtask.getEpicId())) {
-            System.out.println("Эпика с таким идентификатором нет. Попробуйте ещё раз.");
-            return;
-        }
         if (subtask.getId() == subtask.getEpicId()) return;
         subtasks.put(id, subtask);
         epics.get(subtask.getEpicId()).getSubtasksList().add(id);
