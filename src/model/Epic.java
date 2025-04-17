@@ -31,4 +31,9 @@ public class Epic extends Task {
         newEpic.setSubtasksList(new ArrayList<>(this.getSubtasksList()));
         return newEpic;
     }
+
+    @Override
+    public TaskTypes getType() {
+        return TaskTypes.EPIC;
+    }
 }

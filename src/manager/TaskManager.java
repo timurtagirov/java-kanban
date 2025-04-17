@@ -3,7 +3,6 @@ package manager;
 import model.Epic;
 import model.Subtask;
 import model.Task;
-
 import java.util.ArrayList;
 
 public interface TaskManager {
