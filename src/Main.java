@@ -1,9 +1,11 @@
 import manager.FileBackedTaskManager;
 import manager.InMemoryTaskManager;
+import manager.Managers;
 import model.Epic;
 import model.Status;
 import model.Subtask;
 import model.Task;
+import model.TaskToStringConverter;
 
 import java.io.File;
 
@@ -88,7 +90,7 @@ public class Main {
 
         System.out.println(taskManager.getHistory());
 
-        FileBackedTaskManager taskManager1 = new FileBackedTaskManager("tasks.csv");
+        FileBackedTaskManager taskManager1 = (FileBackedTaskManager) Managers.getDefault();
         taskManager1.addTask(task1);
         taskManager1.addTask(task2);
         taskManager1.addEpic(epicA);
@@ -97,17 +99,17 @@ public class Main {
         taskManager1.addEpic(epicB);
         taskManager1.addSubtask(subtaskB1);
 
-        System.out.println(taskManager1.taskToString(task1));
-        System.out.println(taskManager1.taskToString(epicA));
-        System.out.println(taskManager1.taskToString(subtaskA1));
-        System.out.println(taskManager1.taskToString(taskManager1.fromString("1,TASK,Задача 1,IN_PROGRESS,Детали задачи 1")));
-        System.out.println(taskManager1.taskToString(taskManager1.fromString("3,EPIC,Эпик A,IN_PROGRESS,Детали эпика A")));
-        System.out.println(taskManager1.taskToString(taskManager1.fromString("4,SUBTASK,Подзадача A1,IN_PROGRESS,Детали подзадачи A1,3")));
+        System.out.println(TaskToStringConverter.taskToString(task1));
+        System.out.println(TaskToStringConverter.taskToString(epicA));
+        System.out.println(TaskToStringConverter.taskToString(subtaskA1));
+        System.out.println(TaskToStringConverter.taskToString(TaskToStringConverter.fromString("1,TASK,Задача 1,IN_PROGRESS,Детали задачи 1")));
+        System.out.println(TaskToStringConverter.taskToString(TaskToStringConverter.fromString("3,EPIC,Эпик A,IN_PROGRESS,Детали эпика A")));
+        System.out.println(TaskToStringConverter.taskToString(TaskToStringConverter.fromString("4,SUBTASK,Подзадача A1,IN_PROGRESS,Детали подзадачи A1,3")));
         System.out.println(System.getProperty("user.dir"));
 
         FileBackedTaskManager taskManager2 = FileBackedTaskManager.loadFromFile(new File("C:\\Users\\Lenovo\\IdeaProjects\\Sprint4\\java-kanban\\tasks.csv"));
-        System.out.println(taskManager2.taskToString(task1));
-        System.out.println(taskManager2.taskToString(epicA));
-        System.out.println(taskManager2.taskToString(subtaskA1));
+        System.out.println(TaskToStringConverter.taskToString(task1));
+        System.out.println(TaskToStringConverter.taskToString(epicA));
+        System.out.println(TaskToStringConverter.taskToString(subtaskA1));
     }
 }

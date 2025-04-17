@@ -28,12 +28,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             if (br.ready()) newTaskString = br.readLine();
             while (br.ready()) {
                 newTaskString = br.readLine();
-                Task task = fromString(newTaskString);
+                Task task = TaskToStringConverter.fromString(newTaskString);
                 if (maxId < task.getId()) maxId = task.getId();
-                if (task instanceof Epic epic) {
-                    taskManager.epics.put(epic.getId(), epic);
-                } else if (task instanceof Subtask subtask) {
-                    taskManager.subtasks.put(subtask.getId(), subtask);
+                if (task.getType() == TaskTypes.EPIC) {
+                    taskManager.epics.put(task.getId(), (Epic) task);
+                } else if (task.getType() == TaskTypes.SUBTASK) {
+                    taskManager.subtasks.put(task.getId(), (Subtask) task);
                 } else {
                     taskManager.tasks.put(task.getId(), task);
                 }
@@ -65,35 +65,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             }
         } catch (IOException e) {
             throw new ManagerSaveException("Something is wrong");
-        }
-    }
-
-    public static String taskToString(Task task) {
-        if (task.getType() == TaskTypes.EPIC) {
-            return Integer.toString(task.getId()) + "," + TaskTypes.EPIC + "," + task.getName() + "," +
-                    task.getStatus() + "," + task.getDescription();
-        } else if (task.getType() == TaskTypes.SUBTASK) {
-            return Integer.toString(task.getId()) + "," + TaskTypes.SUBTASK + "," + task.getName() + "," +
-                    task.getStatus() + "," + task.getDescription() + "," + ((Subtask) task).getEpicId();
-        } else {
-            return Integer.toString(task.getId()) + "," + TaskTypes.TASK + "," + task.getName() + "," +
-                    task.getStatus() + "," + task.getDescription();
-        }
-    }
-
-    public static Task fromString(String value) {
-        String[] taskInfo = value.split(",", 6);
-        int id = Integer.parseInt(taskInfo[0]);
-        String name = taskInfo[2];
-        String description = taskInfo[4];
-        Status status = Status.valueOf(taskInfo[3]);
-        if (TaskTypes.valueOf(taskInfo[1]) == TaskTypes.TASK) {
-            return new Task(name, description, id, status);
-        } else if (TaskTypes.valueOf(taskInfo[1]) == TaskTypes.EPIC) {
-            return new Epic(name, description, id);
-        } else {
-            int epicId = Integer.parseInt(taskInfo[5]);
-            return new Subtask(name, description, id, status, epicId);
         }
     }
 
