@@ -37,6 +37,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 } else {
                     taskManager.tasks.put(task.getId(), task);
                 }
+                taskManager.tasksInOrder.add(task);
             }
         } catch (IOException e) {
             throw new ManagerSaveException("Something is wrong");
@@ -53,7 +54,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             throw new ManagerSaveException("Something is wrong");
         }
         try (FileWriter fileWriter = new FileWriter(fileName, StandardCharsets.UTF_8, true)) {
-            fileWriter.write("id,type,name,status,description,epic\n");
+            fileWriter.write("id,type,name,status,description,duration,startTime,epic\n");
             for (Task task : tasks.values()) {
                 fileWriter.write(TaskToStringConverter.taskToString(task) + "\n");
             }

@@ -1,5 +1,7 @@
 package model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
@@ -7,18 +9,24 @@ public class Task {
     private String description;
     protected int id;
     private Status status;
+    private Duration duration;
+    private LocalDateTime startTime;
 
-    public Task(String name, String description, int id, Status status) {
+    public Task(String name, String description, int id, Status status, Duration duration, LocalDateTime startTime) {
         this.name = name;
         this.description = description;
         this.id = id;
         this.status = status;
+        this.duration = duration;
+        this.startTime = startTime;
     }
 
-    public Task(String name, String description, Status status) {
+    public Task(String name, String description, Status status, Duration duration, LocalDateTime startTime) {
         this.name = name;
         this.description = description;
         this.status = status;
+        this.duration = duration;
+        this.startTime = startTime;
     }
 
     public Task(String name, String description) {
@@ -73,6 +81,22 @@ public class Task {
         return this.status;
     }
 
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public Duration getDuration() {
+        return this.duration;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getStartTime() {
+        return this.startTime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -92,14 +116,21 @@ public class Task {
                 ", description.length='" + description.length() + '\'' +
                 ", id=" + id +
                 ", status=" + status +
+                ", startTime=" + startTime +
+                ", duration=" + duration +
+                ", endTime=" + getEndTime() +
                 '}';
     }
 
     public Task copy() {
-        return new Task(name, description, id, status);
+        return new Task(name, description, id, status, duration, startTime);
     }
 
     public TaskTypes getType() {
         return TaskTypes.TASK;
+    }
+
+    public LocalDateTime getEndTime() {
+        return startTime.plus(duration);
     }
 }
