@@ -266,7 +266,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    public boolean isOverlap (Task task1) {
+    public boolean isOverlap(Task task1) {
         return (task1.getStartTime() != null) &&
                 tasksInOrder.stream().anyMatch(someTask -> doTasksOverlap(someTask, task1));
     }
