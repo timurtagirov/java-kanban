@@ -18,6 +18,12 @@ public class Epic extends Task {
         this.id = id;
     }
 
+    public Epic(String name, String description, int id, Status status) {
+        super(name, description);
+        this.id = id;
+        this.setStatus(status);
+    }
+
     public Epic(String name, String description, int id, Status status, Duration duration, LocalDateTime startTime) {
         super(name, description, status, duration, startTime);
         this.id = id;

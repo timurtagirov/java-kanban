@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.TreeSet;
 
 abstract class TaskManagerTest<T extends TaskManager> {
     T manager;
@@ -29,6 +28,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test  // Проверка наличия связанного эпика у подзадач
     public void shouldHaveCommonEpic() {
+        System.out.println(manager.getTasks().size());
         manager.addEpic(epic);
         manager.addSubtask(subtaskA1);
         manager.addSubtask(subtaskB1);
@@ -95,12 +95,36 @@ abstract class TaskManagerTest<T extends TaskManager> {
         manager.addEpic(epic3);
         manager.addSubtask(subtaskA3);
         manager.addSubtask(subtaskB3);
-        TreeSet<Task> tasks = manager.getPrioritizedTasks();
-        for (Task task : tasks) {
-            System.out.println(task);
-        }
+        assertTrue(manager.getPrioritizedTasks().size() == 6 &&
+                manager.getPrioritizedTasks().getFirst().equals(manager.getById(2)) &&
+                manager.getPrioritizedTasks().getLast().equals(manager.getById(6)));
+    }
+
+    @Test
+    public void shouldReturnThreeTasksOnlyInRightOrder() {
+        Task task1 = new Task("Task 1", "1", 1, Status.NEW, Duration.ofMinutes(120), LocalDateTime.of(2025, 4, 23, 15, 0));
+        // Вторая задача позже первой без пересечений
+        Task task2 = new Task("Task 2", "2", 2, Status.NEW, Duration.ofMinutes(120), LocalDateTime.of(2025, 4, 23, 18, 0));
+        //Третья задача раньше первой без пересечений
+        Task task3 = new Task("Task 3", "3", 3, Status.NEW, Duration.ofMinutes(120), LocalDateTime.of(2025, 4, 23, 13, 0));
+        //Четвертая задача заканчивается на отрезке времени третьей
+        Task task4 = new Task("Task 4", "4", 4, Status.NEW, Duration.ofMinutes(120), LocalDateTime.of(2025, 4, 23, 12, 0));
+        //Пятая задача начинается на отрезке времени второй
+        Task task5 = new Task("Task 5", "5", 5, Status.NEW, Duration.ofMinutes(120), LocalDateTime.of(2025, 4, 23, 19, 0));
+        //Шестая задача целиком находится на отрезке времени первой
+        Task task6 = new Task("Task 6", "6", 6, Status.NEW, Duration.ofMinutes(60), LocalDateTime.of(2025, 4, 23, 15, 30));
+        // Седьмая задача начинается раньше второй и заканчивается позже второй
+        Task task7 = new Task("Task 7", "7", 7, Status.NEW, Duration.ofMinutes(240), LocalDateTime.of(2025, 4, 23, 17, 30));
+        manager.addTask(task1);
+        manager.addTask(task2); // должно добавиться
+        manager.addTask(task3); // должно добавиться
+        manager.addTask(task4); // не должно добавиться
+        manager.addTask(task5); // не должно добавиться
+        manager.addTask(task6); // не должно добавиться
+        manager.addTask(task7); // не должно добавиться
         assertTrue(manager.getPrioritizedTasks().size() == 3 &&
-                manager.getPrioritizedTasks().getFirst().equals(manager.getById(1)) &&
-                manager.getPrioritizedTasks().getLast().equals(manager.getById(4)));
+                manager.getPrioritizedTasks().getFirst().equals(manager.getById(3)) &&
+                manager.getPrioritizedTasks().getLast().equals(manager.getById(2)) &&
+                manager.getPrioritizedTasks().get(1).equals(manager.getById(1)));
     }
 }
