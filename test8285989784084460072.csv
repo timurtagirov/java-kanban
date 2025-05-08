@@ -1,0 +1,4 @@
+id,type,name,status,description,duration,startTime,epic
+1,EPIC,Epic1,IN_PROGRESS,Epic details
+2,SUBTASK,Подзадача A1,IN_PROGRESS,Детали подзадачи A1,40,2025.04.23 10:00,1
+3,SUBTASK,Подзадача B1,DONE,Детали подзадачи B1,20,2025.04.23 11:00,1

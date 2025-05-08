@@ -1,0 +1,6 @@
+id,type,name,status,description,duration,startTime,epic
+1,TASK,Задача 1,IN_PROGRESS,Детали задачи 1,40,2025.04.23 10:00
+2,TASK,Задача 2,IN_PROGRESS,Детали задачи 2,120,2025.04.23 15:00
+3,EPIC,Эпик A,IN_PROGRESS,Детали эпика A
+5,EPIC,Эпик B,NEW,Новые детали эпика B
+4,SUBTASK,Подзадача A1,IN_PROGRESS,Детали подзадачи A1,20,2025.04.23 11:00,3

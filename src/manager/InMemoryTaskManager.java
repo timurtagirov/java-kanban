@@ -1,9 +1,6 @@
 package manager;
 
-import model.Epic;
-import model.Status;
-import model.Subtask;
-import model.Task;
+import model.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -129,7 +126,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeById(int id) {
-        if (getById(id) != null) tasksInOrder.remove(getById(id));
+        if (getById(id) != null && getById(id).getType() != TaskTypes.EPIC) {
+            tasksInOrder.remove(getById(id));
+        }
         if (tasks.containsKey(id)) {
             tasks.remove(id);
         } else if (epics.containsKey(id)) {
@@ -219,45 +218,25 @@ public class InMemoryTaskManager implements TaskManager {
     // Проверка времени начала и конца эпика
     private void checkEpicStartTimeAndDuration(int epicId) {
         ArrayList<Integer> subtasksList = epics.get(epicId).getSubtasksList();
-        LocalDateTime startTime;
-        LocalDateTime endTime;
+        Epic epic = epics.get(epicId);
         if (subtasksList.isEmpty()) {
-            startTime = LocalDateTime.now();
-            endTime = LocalDateTime.now();
+            epic.setStartTime(LocalDateTime.now());
+            epic.setEndTime(LocalDateTime.now());
         } else {
-            LocalDateTime[] startEnd = subtasksList.stream()
-                    .map(subtaskId -> subtasks.get(subtaskId))
-                    .map(subtask -> {
-                        LocalDateTime start = subtask.getStartTime();
-                        LocalDateTime end = subtask.getStartTime().plus(subtask.getDuration());
-                        return new LocalDateTime[]{start, end};
-                    })
-                    .collect(
-                            () -> new LocalDateTime[]{null, null},
-                            (acc, dates) -> {
-                                if (acc[0] == null || dates[0].isBefore(acc[0])) {
-                                    acc[0] = dates[0];
-                                }
-                                if (acc[1] == null || dates[1].isAfter(acc[1])) {
-                                    acc[1] = dates[1];
-                                }
-                            },
-                            (acc1, acc2) -> {
-                                if (acc2[0] != null && (acc1[0] == null || acc2[0].isBefore(acc1[0]))) {
-                                    acc1[0] = acc2[0];
-                                }
-                                if (acc2[1] != null && (acc1[1] == null || acc2[1].isAfter(acc1[1]))) {
-                                    acc1[1] = acc2[1];
-                                }
-                            }
-                    );
-            startTime = startEnd[0];
-            endTime = startEnd[1];
+            subtasksList.stream()
+                    .map(subtasks::get)
+                    .forEachOrdered(subtask -> {
+                        if (epic.getStartTime() == null || epic.getStartTime().isAfter(subtask.getStartTime())) {
+                            epic.setStartTime(subtask.getStartTime());
+                        }
+                        if (epic.getEndTime() == null || epic.getEndTime().isBefore(subtask.getEndTime())) {
+                            epic.setEndTime(subtask.getEndTime());
+                        }
+                    });
         }
-        Duration duration = Duration.between(startTime, endTime);
-        epics.get(epicId).setStartTime(startTime);
-        epics.get(epicId).setDuration(duration);
-        epics.get(epicId).setEndTime(endTime);
+        Duration duration = Duration.between(epic.getStartTime(), epic.getEndTime());
+        epic.setDuration(duration);
+        updateEpic(epic);
     }
 
     public ArrayList<Task> getPrioritizedTasks() {
