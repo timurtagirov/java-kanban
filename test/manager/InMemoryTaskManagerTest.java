@@ -10,23 +10,31 @@ import model.Status;
 import model.Subtask;
 import model.Task;
 
-class InMemoryTaskManagerTest {
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+
+class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
 
     private final InMemoryTaskManager taskManager = new InMemoryTaskManager();
+
+    @Override
+    InMemoryTaskManager createManager() {
+        return new InMemoryTaskManager();
+    }
 
     @BeforeEach  // очищаем список задач перед новым тестом
     public void clearAll() {
         taskManager.removeTasks();
-        ;
         taskManager.removeEpics();
         taskManager.removeSubtasks();
     }
 
     @Test      // Проверка, что InMemoryTaskManager действительно добавляет задачи разного типа и может найти их по id
     public void shouldAddAndGetTasks() {
-        Task task1 = new Task("Задача 1", "Детали задачи 1", 1, Status.NEW);
+        Task task1 = new Task("Задача 1", "Детали задачи 1", 1, Status.NEW, Duration.ofMinutes(120), LocalDateTime.of(2025, 4, 23, 15, 0));
         Epic epicA = new Epic("Эпик A", "Детали эпика A", 2);
-        Subtask subtaskA1 = new Subtask("Подзадача A1", "Детали подзадачи A1", 3, Status.NEW, 2);
+        Subtask subtaskA1 = new Subtask("Подзадача A1", "Детали подзадачи A1", 3, Status.NEW, 2, Duration.ofMinutes(100), LocalDateTime.of(2025, 4, 23, 12, 30));
         taskManager.addTask(task1);
         taskManager.addEpic(epicA);
         taskManager.addSubtask(subtaskA1);
@@ -37,8 +45,8 @@ class InMemoryTaskManagerTest {
 
     @Test   // Проверка, что задачи с заданным id и сгенерированным id не конфликтуют внутри менеджера
     public void shouldChangeIdWhenSuchIdAlreadyExists() {
-        Task task1 = new Task("Задача 1", "Детали задачи 1", 1, Status.NEW);
-        Task newTask = new Task("Новая задача", "Новые детали задачи", 1, Status.NEW);
+        Task task1 = new Task("Задача 1", "Детали задачи 1", 1, Status.NEW, Duration.ofMinutes(100), LocalDateTime.of(2025, 4, 23, 12, 30));
+        Task newTask = new Task("Новая задача", "Новые детали задачи", 1, Status.NEW, Duration.ofMinutes(100), LocalDateTime.of(2025, 4, 23, 14, 30));
         Epic epicA = new Epic("Эпик A", "Детали эпика A", 1);
         taskManager.addTask(task1);
         taskManager.addTask(newTask);
@@ -50,15 +58,15 @@ class InMemoryTaskManagerTest {
     @Test   // Проверка, что после добавления задачи в менеджер, ее поля не меняются
     // (кроме списка подзадач для эпика, он должен меняться при добавлении сабтаска, поэтому это поле не проверяем)
     public void shouldNotChangeTasksAfterAddingToTaskManager() {
-        Task task1 = new Task("Задача 1", "Детали задачи 1", 1, Status.NEW);
+        Task task1 = new Task("Задача 1", "Детали задачи 1", 1, Status.NEW, Duration.ofMinutes(100), LocalDateTime.of(2025, 4, 23, 12, 30));
         Epic epicA = new Epic("Эпик A", "Детали эпика A", 2);
-        Subtask subtaskA1 = new Subtask("Подзадача A1", "Детали подзадачи A1", 3, Status.NEW, 2);
+        Subtask subtaskA1 = new Subtask("Подзадача A1", "Детали подзадачи A1", 3, Status.NEW, 2, Duration.ofMinutes(20), LocalDateTime.of(2025, 4, 23, 16, 0));
         taskManager.addTask(task1);
         taskManager.addEpic(epicA);
         taskManager.addSubtask(subtaskA1);
-        Task task2 = new Task("Задача 1", "Детали задачи 1", 1, Status.NEW);
+        Task task2 = new Task("Задача 1", "Детали задачи 1", 1, Status.NEW, Duration.ofMinutes(100), LocalDateTime.of(2025, 4, 23, 12, 30));
         Epic epicB = new Epic("Эпик A", "Детали эпика A", 2);
-        Subtask subtaskA2 = new Subtask("Подзадача A1", "Детали подзадачи A1", 3, Status.NEW, 2);
+        Subtask subtaskA2 = new Subtask("Подзадача A1", "Детали подзадачи A1", 3, Status.NEW, 2, Duration.ofMinutes(20), LocalDateTime.of(2025, 4, 23, 16, 0));
         assertTrue(equalsByFields(task2, taskManager.getById(1)));
         assertTrue(equalsByFields(epicB, taskManager.getById(2)));
         int check = taskManager.getSubtasks().size();

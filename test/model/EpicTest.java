@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import manager.InMemoryTaskManager;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 class EpicTest {
@@ -30,11 +32,55 @@ class EpicTest {
     public void shouldNotHaveRemovedSubtask() {
         InMemoryTaskManager taskManager = new InMemoryTaskManager();
         taskManager.addEpic(epic);
-        Subtask subtaskA1 = new Subtask("Подзадача A1", "Детали подзадачи A1", 2, Status.IN_PROGRESS, 1);
-        Subtask subtaskB1 = new Subtask("Подзадача B1", "Детали подзадачи B1", 3, Status.DONE, 1);
+        Subtask subtaskA1 = new Subtask("Подзадача A1", "Детали подзадачи A1", 2, Status.IN_PROGRESS, 1, Duration.ofMinutes(40), LocalDateTime.of(2025, 4, 23, 10, 0));
+        Subtask subtaskB1 = new Subtask("Подзадача B1", "Детали подзадачи B1", 3, Status.DONE, 1, Duration.ofMinutes(20), LocalDateTime.of(2025, 4, 23, 11, 0));
         taskManager.addSubtask(subtaskA1);
         taskManager.addSubtask(subtaskB1);
         taskManager.removeById(2);
         assertEquals(1, taskManager.getEpics().getFirst().getSubtasksList().size());
+    }
+
+    @Test  // Проверка, что если все сабтаски NEW, то и эпик тоже NEW
+    public void shouldHaveStatusNew() {
+        InMemoryTaskManager taskManager = new InMemoryTaskManager();
+        taskManager.addEpic(epic);
+        Subtask subtaskA1 = new Subtask("Подзадача A1", "Детали подзадачи A1", 2, Status.NEW, 1, Duration.ofMinutes(40), LocalDateTime.of(2025, 4, 23, 10, 0));
+        Subtask subtaskB1 = new Subtask("Подзадача B1", "Детали подзадачи B1", 3, Status.NEW, 1, Duration.ofMinutes(20), LocalDateTime.of(2025, 4, 23, 11, 0));
+        taskManager.addSubtask(subtaskA1);
+        taskManager.addSubtask(subtaskB1);
+        assertEquals(Status.NEW, taskManager.getEpics().getFirst().getStatus());
+    }
+
+    @Test  // Проверка, что если все сабтаски DONE, то и эпик тоже DONE
+    public void shouldHaveStatusDone() {
+        InMemoryTaskManager taskManager = new InMemoryTaskManager();
+        taskManager.addEpic(epic);
+        Subtask subtaskA1 = new Subtask("Подзадача A1", "Детали подзадачи A1", 2, Status.DONE, 1, Duration.ofMinutes(40), LocalDateTime.of(2025, 4, 23, 10, 0));
+        Subtask subtaskB1 = new Subtask("Подзадача B1", "Детали подзадачи B1", 3, Status.DONE, 1, Duration.ofMinutes(20), LocalDateTime.of(2025, 4, 23, 11, 0));
+        taskManager.addSubtask(subtaskA1);
+        taskManager.addSubtask(subtaskB1);
+        assertEquals(Status.DONE, taskManager.getEpics().getFirst().getStatus());
+    }
+
+    @Test  // Проверка, что если сабтаски NEW и DONE, то статус эпика IN_PROGRESS
+    public void shouldHaveStatusInProgress() {
+        InMemoryTaskManager taskManager = new InMemoryTaskManager();
+        taskManager.addEpic(epic);
+        Subtask subtaskA1 = new Subtask("Подзадача A1", "Детали подзадачи A1", 2, Status.NEW, 1, Duration.ofMinutes(40), LocalDateTime.of(2025, 4, 23, 10, 0));
+        Subtask subtaskB1 = new Subtask("Подзадача B1", "Детали подзадачи B1", 3, Status.DONE, 1, Duration.ofMinutes(20), LocalDateTime.of(2025, 4, 23, 11, 0));
+        taskManager.addSubtask(subtaskA1);
+        taskManager.addSubtask(subtaskB1);
+        assertEquals(Status.IN_PROGRESS, taskManager.getEpics().getFirst().getStatus());
+    }
+
+    @Test  // Проверка, что если все сабтаски IN_PROGRESS, то и эпик тоже IN_PROGRESS
+    public void shouldHaveStatusInProgressWhenSubtasksInProgress() {
+        InMemoryTaskManager taskManager = new InMemoryTaskManager();
+        taskManager.addEpic(epic);
+        Subtask subtaskA1 = new Subtask("Подзадача A1", "Детали подзадачи A1", 2, Status.IN_PROGRESS, 1, Duration.ofMinutes(40), LocalDateTime.of(2025, 4, 23, 10, 0));
+        Subtask subtaskB1 = new Subtask("Подзадача B1", "Детали подзадачи B1", 3, Status.IN_PROGRESS, 1, Duration.ofMinutes(20), LocalDateTime.of(2025, 4, 23, 11, 0));
+        taskManager.addSubtask(subtaskA1);
+        taskManager.addSubtask(subtaskB1);
+        assertEquals(Status.IN_PROGRESS, taskManager.getEpics().getFirst().getStatus());
     }
 }

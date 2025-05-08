@@ -1,10 +1,13 @@
 package model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Subtask extends Task {
     private int epicId;
 
-    public Subtask(String name, String description, Status status, int epicId) {
-        super(name, description, status);
+    public Subtask(String name, String description, Status status, int epicId, Duration duration, LocalDateTime startTime) {
+        super(name, description, status, duration, startTime);
         if (epicId != id) {
             this.epicId = epicId;
         } else {
@@ -12,8 +15,8 @@ public class Subtask extends Task {
         }
     }
 
-    public Subtask(String name, String description, int id, Status status, int epicId) {
-        super(name, description, id, status);
+    public Subtask(String name, String description, int id, Status status, int epicId, Duration duration, LocalDateTime startTime) {
+        super(name, description, id, status, duration, startTime);
         if (epicId != id) this.epicId = epicId;
     }
 
@@ -35,7 +38,7 @@ public class Subtask extends Task {
     @Override
     public Subtask copy() {
         Subtask newSubtask = new Subtask(this.getName(), this.getDescription(), this.getId(), this.getStatus(),
-                this.getEpicId());
+                this.getEpicId(), this.getDuration(), this.getStartTime());
         return newSubtask;
     }
 
