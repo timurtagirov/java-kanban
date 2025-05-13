@@ -38,7 +38,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test    // Проверяем, что статусы в эпике проставляются правильно
-    public void shouldHaveCorrectStatusOfEpics() {
+    public void shouldHaveCorrectStatusOfEpics() throws IOException {
         manager.addEpic(epic);
         manager.addSubtask(subtaskA1);
         manager.addSubtask(subtaskB1);
@@ -79,7 +79,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test   // Проверяем, что getPrioritizedTask() работает правильно
-    public void shouldReturnTasksInRightOrder() {
+    public void shouldReturnTasksInRightOrder() throws IOException {
         manager.addEpic(epic);          // 10:00-11:20          23.04.2025
         manager.addSubtask(subtaskA1);  //10:00 - 10:40         23.04.2025
         manager.addSubtask(subtaskB1);  //11:00 - 11:20         23.04.2025
@@ -101,7 +101,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void shouldReturnThreeTasksOnlyInRightOrder() {
+    public void shouldReturnThreeTasksOnlyInRightOrder() throws IOException {
         Task task1 = new Task("Task 1", "1", 1, Status.NEW, Duration.ofMinutes(120), LocalDateTime.of(2025, 4, 23, 15, 0));
         // Вторая задача позже первой без пересечений
         Task task2 = new Task("Task 2", "2", 2, Status.NEW, Duration.ofMinutes(120), LocalDateTime.of(2025, 4, 23, 18, 0));

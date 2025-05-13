@@ -4,6 +4,7 @@ import model.Status;
 import model.Task;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -19,7 +20,7 @@ class InMemoryHistoryManagerTest extends HistoryManagerTest<InMemoryHistoryManag
     }
 
     @Test   // Проверка, что в HistoryManager остаётся старая версия задачи даже после её обновления в менеджере
-    public void shouldKeepOldVersionsOfTasks() {
+    public void shouldKeepOldVersionsOfTasks() throws IOException {
         Task task = new Task("Задача 1", "Детали задачи 1", 1, Status.NEW, Duration.ofMinutes(100), LocalDateTime.of(2025, 4, 23, 12, 30));
         Task oldTask = new Task("Задача 1", "Детали задачи 1", 1, Status.NEW, Duration.ofMinutes(100), LocalDateTime.of(2025, 4, 23, 12, 30));
         taskManager.addTask(task);               // добавляем первую версию задачи
@@ -33,7 +34,7 @@ class InMemoryHistoryManagerTest extends HistoryManagerTest<InMemoryHistoryManag
     }
 
     @Test // Проверка, что возвращает 1 задачу 1 раз, несмотря на множество обращений к ней
-    public void shouldReturnTaskOneTime() {
+    public void shouldReturnTaskOneTime() throws IOException {
         Task task = new Task("Задача 1", "Детали задачи 1", 1, Status.NEW, Duration.ofMinutes(100), LocalDateTime.of(2025, 4, 23, 12, 30));
         taskManager.addTask(task);
         for (int i = 0; i < 12; i++) {
@@ -44,7 +45,7 @@ class InMemoryHistoryManagerTest extends HistoryManagerTest<InMemoryHistoryManag
     }
 
     @Test // Проверка, что вернет таски в правильном порядке
-    public void shouldReturnTasksInRightOrder() {
+    public void shouldReturnTasksInRightOrder() throws IOException {
         taskManager.addTask(new Task("Задача 1", "Детали задачи 1", 1, Status.NEW, Duration.ofMinutes(100), LocalDateTime.of(2025, 4, 23, 12, 30)));
         taskManager.addTask(new Task("Задача 2", "Детали задачи 2", 2, Status.NEW, Duration.ofMinutes(50), LocalDateTime.of(2025, 4, 23, 11, 30)));
         taskManager.addTask(new Task("Задача 3", "Детали задачи 3", 3, Status.NEW, Duration.ofMinutes(30), LocalDateTime.of(2025, 4, 23, 11, 0)));
@@ -84,7 +85,7 @@ class InMemoryHistoryManagerTest extends HistoryManagerTest<InMemoryHistoryManag
     }
 
     @Test
-    public void shouldRemoveTasksFromHistoryManagerAfterRemovalFromTaskManager() {
+    public void shouldRemoveTasksFromHistoryManagerAfterRemovalFromTaskManager()  throws IOException {
         taskManager.addTask(new Task("Задача 1", "Детали задачи 1", 1, Status.NEW, Duration.ofMinutes(100), LocalDateTime.of(2025, 4, 23, 12, 30)));
         taskManager.addTask(new Task("Задача 2", "Детали задачи 2", 2, Status.NEW, Duration.ofMinutes(50), LocalDateTime.of(2025, 4, 23, 11, 30)));
         taskManager.addTask(new Task("Задача 3", "Детали задачи 3", 3, Status.NEW, Duration.ofMinutes(30), LocalDateTime.of(2025, 4, 23, 11, 0)));

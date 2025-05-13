@@ -24,9 +24,9 @@ public interface TaskManager {
 
     void removeSubtasks();
 
-    Task getById(int id);
+    Task getById(int id) throws NotFoundException;
 
-    void removeById(int id);
+    void removeById(int id) throws NotFoundException;
 
     void updateTask(Task task);
 
@@ -37,4 +37,6 @@ public interface TaskManager {
     ArrayList<Task> getHistory();
 
     ArrayList<Task> getPrioritizedTasks();
+
+    boolean isOverlap(Task task);
 }

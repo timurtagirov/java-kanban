@@ -5,12 +5,12 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
-    private String name;
-    private String description;
+    String name;
+    String description;
     protected int id;
-    private Status status;
-    private Duration duration;
-    private LocalDateTime startTime;
+    Status status;
+    Duration duration;
+    LocalDateTime startTime;
 
     public Task(String name, String description, int id, Status status, Duration duration, LocalDateTime startTime) {
         this.name = name;

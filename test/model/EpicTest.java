@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import manager.InMemoryTaskManager;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ class EpicTest {
     }
 
     @Test   // Проверка, что внутри эпиков не должно оставаться неактуальных id подзадач
-    public void shouldNotHaveRemovedSubtask() {
+    public void shouldNotHaveRemovedSubtask() throws IOException {
         InMemoryTaskManager taskManager = new InMemoryTaskManager();
         taskManager.addEpic(epic);
         Subtask subtaskA1 = new Subtask("Подзадача A1", "Детали подзадачи A1", 2, Status.IN_PROGRESS, 1, Duration.ofMinutes(40), LocalDateTime.of(2025, 4, 23, 10, 0));
