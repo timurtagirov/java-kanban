@@ -1,6 +1,6 @@
-import HttpTaskServer.DurationAdapter;
-import HttpTaskServer.HttpTaskServer;
-import HttpTaskServer.LocalDateTimeAdapter;
+import httptaskserver.DurationAdapter;
+import httptaskserver.HttpTaskServer;
+import httptaskserver.LocalDateTimeAdapter;
 import com.google.gson.*;
 import manager.InMemoryTaskManager;
 import manager.TaskManager;

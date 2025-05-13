@@ -1,15 +1,15 @@
-package HttpTaskServer;
+package httptaskserver;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import manager.NotFoundException;
 import manager.TaskManager;
-import model.Task;
+import model.Subtask;
 
 import java.io.IOException;
 
-class TaskHandler extends BaseHttpHandler implements HttpHandler {
-    public TaskHandler(TaskManager manager) {
+class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
+    public SubtaskHandler(TaskManager manager) {
         super(manager);
     }
 
@@ -19,7 +19,7 @@ class TaskHandler extends BaseHttpHandler implements HttpHandler {
         String uri = exchange.getRequestURI().getPath();
         String[] uriParts = uri.split("/");
         if (method.equals("GET") && uriParts.length == 2) {
-            String text = gson.toJson(manager.getTasks());
+            String text = gson.toJson(manager.getSubtasks());
             sendText(exchange, text, method);
         } else if (method.equals("GET") && uriParts.length == 3) {
             try {
@@ -31,16 +31,16 @@ class TaskHandler extends BaseHttpHandler implements HttpHandler {
             }
         } else if (method.equals("POST") && uriParts.length == 2) {
             String input = new String(exchange.getRequestBody().readAllBytes(), DEFAULTCHARSET);
-            Task task = gson.fromJson(input, Task.class);
-            if (manager.isOverlap(task)) {
+            Subtask subtask = gson.fromJson(input, Subtask.class);
+            if (manager.isOverlap(subtask)) {
                 sendHasInteractions(exchange);
                 return;
             }
-            if (task.getId() == 0) {
-                manager.addTask(task);
+            if (subtask.getId() == 0) {
+                manager.addSubtask(subtask);
                 sendText(exchange, "Task has been successfully added", "POST");
             } else {
-                manager.updateTask(task);
+                manager.updateSubtask(subtask);
                 sendText(exchange, "Task has been successfully added", "POST");
             }
         } else if (method.equals("DELETE") && uriParts.length == 3) {

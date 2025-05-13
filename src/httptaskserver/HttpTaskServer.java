@@ -1,4 +1,4 @@
-package HttpTaskServer;
+package httptaskserver;
 
 import com.sun.net.httpserver.HttpServer;
 import manager.*;

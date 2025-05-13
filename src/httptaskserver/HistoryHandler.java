@@ -1,4 +1,4 @@
-package HttpTaskServer;
+package httptaskserver;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -6,8 +6,8 @@ import manager.TaskManager;
 
 import java.io.IOException;
 
-class PriorityHandler extends BaseHttpHandler implements HttpHandler {
-    public PriorityHandler(TaskManager manager) {
+class HistoryHandler extends BaseHttpHandler implements HttpHandler {
+    public HistoryHandler(TaskManager manager) {
         super(manager);
     }
 
@@ -17,7 +17,7 @@ class PriorityHandler extends BaseHttpHandler implements HttpHandler {
         String uri = exchange.getRequestURI().getPath();
         String[] uriParts = uri.split("/");
         if (method.equals("GET") && uriParts.length == 2) {
-            String text = gson.toJson(manager.getPrioritizedTasks());
+            String text = gson.toJson(manager.getHistory());
             sendText(exchange, text, method);
         } else {
             sendNotFound(exchange);
