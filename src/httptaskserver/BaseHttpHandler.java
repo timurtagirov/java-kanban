@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 class BaseHttpHandler {
     protected final String fileName = "tasks.csv";
-    final Charset DEFAULTCHARSET = StandardCharsets.UTF_8;
+    final Charset defaultcharset = StandardCharsets.UTF_8;
     protected Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
             .registerTypeAdapter(Duration.class, new DurationAdapter())
             .setPrettyPrinting()
@@ -34,7 +34,7 @@ class BaseHttpHandler {
                 rCode = 200;
             }
             exchange.sendResponseHeaders(rCode, 0);
-            exchange.getResponseBody().write(text.getBytes(DEFAULTCHARSET));
+            exchange.getResponseBody().write(text.getBytes(defaultcharset));
             exchange.close();
         } catch (IOException e) {
             System.out.println("Something went wrong");
@@ -43,13 +43,13 @@ class BaseHttpHandler {
 
     protected void sendNotFound(HttpExchange exchange) throws IOException {
         exchange.sendResponseHeaders(404, 0);
-        exchange.getResponseBody().write("A task with such id doesn't exist".getBytes(DEFAULTCHARSET));
+        exchange.getResponseBody().write("A task with such id doesn't exist".getBytes(defaultcharset));
         exchange.close();
     }
 
     protected void sendHasInteractions(HttpExchange exchange) throws IOException {
         exchange.sendResponseHeaders(406, 0);
-        exchange.getResponseBody().write("The task is overlapping with an existing task".getBytes(DEFAULTCHARSET));
+        exchange.getResponseBody().write("The task is overlapping with an existing task".getBytes(defaultcharset));
         exchange.close();
     }
 }

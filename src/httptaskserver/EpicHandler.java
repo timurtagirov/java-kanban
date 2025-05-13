@@ -30,7 +30,7 @@ class EpicHandler extends BaseHttpHandler implements HttpHandler {
                 sendNotFound(exchange);
             }
         } else if (method.equals("POST") && uriParts.length == 2) {
-            String input = new String(exchange.getRequestBody().readAllBytes(), DEFAULTCHARSET);
+            String input = new String(exchange.getRequestBody().readAllBytes(), defaultcharset);
             Epic epic = gson.fromJson(input, Epic.class);
             if (epic.getId() == 0) {
                 manager.addEpic(epic);
