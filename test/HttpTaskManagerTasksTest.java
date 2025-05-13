@@ -1,3 +1,4 @@
+import HttpTaskServer.*;
 import com.google.gson.*;
 import manager.InMemoryTaskManager;
 import manager.TaskManager;
@@ -23,7 +24,7 @@ public class HttpTaskManagerTasksTest {
 
     // создаём экземпляр InMemoryTaskManager
     TaskManager manager = new InMemoryTaskManager();
-    // передаём его в качестве аргумента в конструктор HttpTaskServer
+    // передаём его в качестве аргумента в конструктор HttpTaskServer.HttpTaskServer
     HttpTaskServer taskServer = new HttpTaskServer(manager);
     Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
             .registerTypeAdapter(Duration.class, new DurationAdapter())

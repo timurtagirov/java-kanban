@@ -1,3 +1,6 @@
+import HttpTaskServer.HttpTaskServer;
+import HttpTaskServer.DurationAdapter;
+import HttpTaskServer.LocalDateTimeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -17,14 +20,13 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class HttpTaskManagerPriorityTest {
     // создаём экземпляр InMemoryTaskManager
     TaskManager manager = new InMemoryTaskManager();
-    // передаём его в качестве аргумента в конструктор HttpTaskServer
+    // передаём его в качестве аргумента в конструктор HttpTaskServer.HttpTaskServer
     HttpTaskServer taskServer = new HttpTaskServer(manager);
     Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
             .registerTypeAdapter(Duration.class, new DurationAdapter())
