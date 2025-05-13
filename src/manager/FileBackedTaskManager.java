@@ -10,7 +10,6 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.ArrayList;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     String fileName;
