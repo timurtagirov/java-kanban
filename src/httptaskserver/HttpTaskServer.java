@@ -1,6 +1,7 @@
 package httptaskserver;
 
 import com.sun.net.httpserver.HttpServer;
+import httptaskserver.handlers.*;
 import manager.*;
 import java.io.File;
 import java.io.IOException;
@@ -14,24 +15,21 @@ public class HttpTaskServer {
     static TaskManager manager;
     static HttpServer server;
 
-    public HttpTaskServer(TaskManager manager) throws NotFoundException {
+    public HttpTaskServer(TaskManager manager) throws IOException {
         this.manager = manager;
+
+        server = HttpServer.create();
+        server.bind(new InetSocketAddress(PORT), 0);
+
+        server.createContext("/tasks", new TaskHandler(manager));
+        server.createContext("/epics", new EpicHandler(manager));
+        server.createContext("/subtasks", new SubtaskHandler(manager));
+        server.createContext("/history", new HistoryHandler(manager));
+        server.createContext("/priority", new PriorityHandler(manager));
     }
 
     public void start() throws IOException {
-        try {
-            server = HttpServer.create();
-            server.bind(new InetSocketAddress(PORT), 0);
-
-            server.createContext("/tasks", new TaskHandler(manager));
-            server.createContext("/epics", new EpicHandler(manager));
-            server.createContext("/subtasks", new SubtaskHandler(manager));
-            server.createContext("/history", new HistoryHandler(manager));
-            server.createContext("/priority", new PriorityHandler(manager));
             server.start();
-        } catch (IOException e) {
-            System.out.println("something went wrong");
-        }
     }
 
     public void stop() {

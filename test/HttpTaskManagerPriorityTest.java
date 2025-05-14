@@ -1,6 +1,6 @@
 import httptaskserver.HttpTaskServer;
-import httptaskserver.DurationAdapter;
-import httptaskserver.LocalDateTimeAdapter;
+import httptaskserver.adapters.DurationAdapter;
+import httptaskserver.adapters.LocalDateTimeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;

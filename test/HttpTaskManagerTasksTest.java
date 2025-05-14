@@ -1,5 +1,7 @@
 import httptaskserver.*;
 import com.google.gson.*;
+import httptaskserver.adapters.DurationAdapter;
+import httptaskserver.adapters.LocalDateTimeAdapter;
 import manager.InMemoryTaskManager;
 import manager.TaskManager;
 import model.Status;
