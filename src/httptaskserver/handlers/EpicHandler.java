@@ -9,6 +9,7 @@ import java.io.IOException;
 
 public class EpicHandler extends BaseHttpHandler implements HttpHandler {
     final String taskType = "epic";
+
     public EpicHandler(TaskManager manager) {
         super(manager);
     }

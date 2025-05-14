@@ -9,6 +9,7 @@ import java.io.IOException;
 
 public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
     final String taskType = "subtask";
+    
     public SubtaskHandler(TaskManager manager) {
         super(manager);
     }
