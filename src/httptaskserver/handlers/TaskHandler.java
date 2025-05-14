@@ -9,6 +9,7 @@ import java.io.IOException;
 
 public class TaskHandler extends BaseHttpHandler implements HttpHandler {
     final String taskType = "task";
+    
     public TaskHandler(TaskManager manager) {
         super(manager);
     }
