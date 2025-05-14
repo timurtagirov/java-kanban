@@ -3,6 +3,7 @@ package httptaskserver;
 import com.sun.net.httpserver.HttpServer;
 import httptaskserver.handlers.*;
 import manager.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -29,7 +30,7 @@ public class HttpTaskServer {
     }
 
     public void start() throws IOException {
-            server.start();
+        server.start();
     }
 
     public void stop() {
@@ -44,7 +45,8 @@ public class HttpTaskServer {
                 manager = (FileBackedTaskManager) Managers.getDefault();
             }
         } catch (NotFoundException e) {
-            System.out.println("Something is wrong");;
+            System.out.println("Something is wrong");
+            ;
         }
         server = HttpServer.create();
         server.bind(new InetSocketAddress(PORT), 0);
