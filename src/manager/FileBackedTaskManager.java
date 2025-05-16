@@ -3,13 +3,10 @@ package manager;
 import model.*;
 
 import java.io.*;
-import java.nio.file.Paths;
-import java.nio.file.Path;
-import java.nio.file.Files;
-import java.io.File;
 import java.nio.charset.StandardCharsets;
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     String fileName;
@@ -20,8 +17,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         this.path = Paths.get(System.getProperty("user.dir"), fileName);
     }
 
-    public static FileBackedTaskManager loadFromFile(File file) throws ManagerSaveException {
+    public static FileBackedTaskManager loadFromFile(File file) throws ManagerSaveException, NotFoundException {
         FileBackedTaskManager taskManager = new FileBackedTaskManager(file.getName());
+        boolean fileExists = true;
         int maxId = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(file.getName(), StandardCharsets.UTF_8))) {
             String newTaskString;
@@ -43,7 +41,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         } catch (IOException e) {
             throw new ManagerSaveException("Something is wrong");
         }
-        taskManager.id = maxId + 1;
+        taskManager.id = maxId;
+        // добавил этот кусок, чтобы после загрузки из файла у эпика обновлялись статус и время
+        for (Subtask subtask : taskManager.getSubtasks()) {
+            Epic epic = (Epic) taskManager.getById(subtask.getEpicId());
+            epic.getSubtasksList().add(subtask.getId());
+            taskManager.historyManager.remove(epic.getId());
+            taskManager.historyManager.remove(subtask.getId());
+        }
+        taskManager.checkAllEpics();
         return taskManager;
     }
 
@@ -68,6 +74,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         } catch (IOException e) {
             throw new ManagerSaveException("Something is wrong");
         }
+    }
+
+    public String getFileName() {
+        return this.fileName;
     }
 
     @Override
@@ -107,7 +117,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void removeById(int id) {
+    public void removeById(int id) throws NotFoundException {
         super.removeById(id);
         save();
     }

@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class Epic extends Task {
     private ArrayList<Integer> subtasksList = new ArrayList<>(); // Для хранения ID подзадач и их статусов
-    LocalDateTime endTime;
+    protected LocalDateTime endTime;
 
     public Epic(String name, String description) {
         super(name, description);

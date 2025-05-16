@@ -1,7 +1,7 @@
 package manager;
 
-import model.Task;
 import model.Node;
+import model.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
